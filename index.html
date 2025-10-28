@@ -1,0 +1,1907 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zyra - Sistema Completo</title>
+    <style>
+        :root {
+            --primary: #7E57C2;
+            --secondary: #2d273a;
+            --accent: #000000;
+            --light: #F5F7FA;
+            --dark: #2782af;
+            --success: #43A047;
+            --warning: #FF8F00;
+            --danger: #E53935;
+            --info: #1E88E5;
+            --text: #37474F;
+            --text-light: #78909C;
+            --border: #000000;
+            --card-bg: #FFFFFF;
+            --sidebar-bg: linear-gradient(180deg, #2C3E50 0%, #34495E 100%);
+            --header-bg: #FFFFFF;
+            --chat-user: #7E57C2;
+            --chat-bot: #F5F5F5;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #ECEFF1 0%, #CFD8DC 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: var(--text);
+        }
+        
+        .app-container {
+            display: flex;
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            height: 97vh;
+        }
+        
+        /* Panel Lateral */
+        .side-panel {
+            width: 320px;
+            background: var(--sidebar-bg);
+            color: white;
+            padding: 35px 25px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 45px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+        }
+        
+        .logo h1 {
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            letter-spacing: 0.5px;
+        }
+        
+        .logo h2 {
+            font-size: 16px;
+            font-weight: 400;
+            opacity: 0.8;
+            letter-spacing: 0.5px;
+        }
+        
+        .nav-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            margin-bottom: 35px;
+        }
+        
+        .nav-button {
+            background: rgba(255, 255, 255, 0.08);
+            border: none;
+            border-radius: 16px;
+            padding: 20px 24px;
+            color: white;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        .nav-button:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateX(8px);
+        }
+        
+        .nav-button.active {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+        }
+        
+        .nav-button i {
+            font-size: 22px;
+            width: 26px;
+            text-align: center;
+        }
+        
+        .user-type {
+            display: none;
+        }
+        
+        .user-type.active {
+            display: block;
+        }
+        
+        .company-info {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 25px;
+            margin-top: auto;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .company-info h3 {
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+        
+        /* Contenido Principal */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--light);
+            position: relative;
+        }
+        
+        /* Header Principal */
+        .main-header {
+            background: var(--header-bg);
+            padding: 25px 35px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        }
+        
+        .header-title {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 14px;
+            align-items: center;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            color: var(--text);
+            font-weight: 500;
+            font-size: 15px;
+        }
+        
+        .user-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .header-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+        
+        .header-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+        
+        .header-btn.secondary {
+            background: var(--light);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        
+        /* Contenedor de Pestañas */
+        .tab-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        
+        .tab-content {
+            flex: 1;
+            padding: 35px;
+            overflow-y: auto;
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: flex;
+            flex-direction: column;
+            animation: fadeIn 0.4s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Diseño del Asistente */
+        .assistant-container {
+            background: var(--card-bg);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .assistant-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+        }
+        
+        .assistant-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .assistant-subtitle {
+            font-size: 15px;
+            opacity: 0.9;
+        }
+        
+        .chat-area {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .message {
+            max-width: 82%;
+            padding: 18px 22px;
+            border-radius: 20px;
+            line-height: 1.5;
+            position: relative;
+            animation: messageSlide 0.3s ease;
+            font-size: 16px;
+        }
+        
+        @keyframes messageSlide {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .bot-message {
+            background: var(--chat-bot);
+            border-bottom-left-radius: 8px;
+            align-self: flex-start;
+            color: var(--text);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+            border-left: 4px solid var(--primary);
+        }
+        
+        .user-message {
+            background: var(--chat-user);
+            color: white;
+            border-bottom-right-radius: 8px;
+            align-self: flex-end;
+            box-shadow: 0 3px 10px rgba(126, 87, 194, 0.2);
+        }
+        
+        .message-time {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 8px;
+            text-align: right;
+        }
+        
+        .chat-input-area {
+            padding: 25px 30px;
+            border-top: 1px solid var(--border);
+            background: white;
+            display: flex;
+            gap: 15px;
+        }
+        
+        .message-input {
+            flex: 1;
+            border: 1px solid var(--border);
+            border-radius: 25px;
+            padding: 16px 22px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s;
+            background: var(--light);
+        }
+        
+        .message-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(126, 87, 194, 0.1);
+        }
+        
+        .send-button {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            border: none;
+            border-radius: 50%;
+            width: 55px;
+            height: 55px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s;
+            font-size: 20px;
+        }
+        
+        .send-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 16px rgba(126, 87, 194, 0.3);
+        }
+        
+        .quick-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 15px;
+        }
+        
+        .quick-option {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 10px 18px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text);
+        }
+        
+        .quick-option:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+        
+        /* Productos en el Chat */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+            gap: 18px;
+            margin-top: 18px;
+        }
+        
+        .product-card {
+            background: white;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 1px solid var(--border);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 130px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #7E57C2 0%, #B388FF 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 13px;
+            text-align: center;
+            padding: 10px;
+        }
+        
+        .product-info {
+            padding: 14px;
+        }
+        
+        .product-name {
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 6px;
+            line-height: 1.3;
+        }
+        
+        .product-price {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 16px;
+        }
+        
+        .product-stock {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+        
+        /* Login */
+        .login-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            gap: 30px;
+        }
+        
+        .login-form {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 450px;
+        }
+        
+        .login-title {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--primary);
+            font-size: 28px;
+            font-weight: 700;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 16px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 16px 18px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 16px;
+            transition: all 0.3s;
+            background: var(--light);
+        }
+        
+        .form-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(126, 87, 194, 0.1);
+            outline: none;
+        }
+        
+        .login-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            font-size: 17px;
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(126, 87, 194, 0.3);
+        }
+        
+        .login-footer {
+            text-align: center;
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(126, 87, 194, 0.05);
+            border-radius: 12px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        /* Dashboard */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 35px;
+        }
+        
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 18px;
+            padding: 28px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary);
+        }
+        
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 18px;
+        }
+        
+        .stat-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .stat-value {
+            font-size: 34px;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+        
+        .stat-trend {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 15px;
+            font-weight: 600;
+        }
+        
+        .trend-up {
+            color: var(--success);
+        }
+        
+        .trend-down {
+            color: var(--danger);
+        }
+        
+        .stat-icon {
+            position: absolute;
+            bottom: 25px;
+            right: 28px;
+            font-size: 45px;
+            opacity: 0.1;
+            color: var(--dark);
+        }
+        
+        /* Encuesta de Satisfacción */
+        .survey-container {
+            background: white;
+            border-radius: 18px;
+            padding: 30px;
+            margin-top: 25px;
+            border: 1px solid var(--border);
+        }
+        
+        .survey-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 18px;
+            text-align: center;
+        }
+        
+        .survey-question {
+            font-size: 17px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .rating-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+        
+        .rating-star {
+            font-size: 36px;
+            cursor: pointer;
+            color: #ddd;
+            transition: all 0.2s;
+        }
+        
+        .rating-star:hover,
+        .rating-star.active {
+            color: #FFD700;
+            transform: scale(1.2);
+        }
+        
+        .survey-btn {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 14px 28px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: block;
+            margin: 0 auto;
+            font-size: 16px;
+        }
+        
+        .survey-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(126, 87, 194, 0.3);
+        }
+        
+        /* Gestión de Inventario */
+        .inventory-container {
+            background: white;
+            border-radius: 18px;
+            padding: 30px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+            border: 1px solid var(--border);
+        }
+        
+        .inventory-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .inventory-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .inventory-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .inventory-table th {
+            background: var(--light);
+            padding: 16px 20px;
+            text-align: left;
+            font-weight: 600;
+            color: var(--dark);
+            border-bottom: 2px solid var(--border);
+            font-size: 15px;
+        }
+        
+        .inventory-table td {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--border);
+            font-size: 15px;
+        }
+        
+        .stock-critical { background: rgba(229, 57, 53, 0.1); color: var(--danger); font-weight: 600; padding: 6px 12px; border-radius: 8px; font-size: 13px; }
+        .stock-low { background: rgba(255, 143, 0, 0.1); color: var(--warning); font-weight: 600; padding: 6px 12px; border-radius: 8px; font-size: 13px; }
+        .stock-ok { background: rgba(67, 160, 71, 0.1); color: var(--success); font-weight: 600; padding: 6px 12px; border-radius: 8px; font-size: 13px; }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 17px;
+            margin-right: 10px;
+            padding: 8px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        
+        .edit-btn { color: var(--warning); }
+        .edit-btn:hover { background: rgba(255, 143, 0, 0.1); }
+        .delete-btn { color: var(--danger); }
+        .delete-btn:hover { background: rgba(229, 57, 53, 0.1); }
+        .restock-btn { color: var(--success); }
+        .restock-btn:hover { background: rgba(67, 160, 71, 0.1); }
+        
+        /* Reportes */
+        .reports-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+        
+        .report-card {
+            background: white;
+            border-radius: 18px;
+            padding: 28px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.06);
+            border: 1px solid var(--border);
+        }
+        
+        .report-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .report-content {
+            min-height: 240px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            font-size: 16px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .reports-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+                height: auto;
+            }
+            
+            .side-panel {
+                width: 100%;
+            }
+            
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Panel Lateral -->
+        <div class="side-panel">
+            <div class="logo">
+                <h1>ZYRA</h1>
+                <h2>Asistente de Moda</h2>
+            </div>
+            
+            <div class="nav-buttons">
+                <!-- Opciones para Clientes -->
+                <div class="user-type" id="client-options">
+                    <button class="nav-button active" data-tab="assistant">
+                        <i>💬</i> Asistente Virtual
+                    </button>
+                    <button class="nav-button" data-tab="products">
+                        <i>🛍️</i> Catálogo
+                    </button>
+                    <button class="nav-button" data-tab="survey">
+                        <i>⭐</i> Encuesta
+                    </button>
+                </div>
+                
+                <!-- Opciones para Empleados -->
+                <div class="user-type" id="employee-options">
+                    <button class="nav-button" data-tab="dashboard">
+                        <i>📊</i> Dashboard
+                    </button>
+                    <button class="nav-button" data-tab="inventory">
+                        <i>📦</i> Inventario
+                    </button>
+                    <button class="nav-button" data-tab="reports">
+                        <i>📈</i> Reportes
+                    </button>
+                </div>
+            </div>
+            
+            <div class="company-info">
+                <h3>Zyra Oficial</h3>
+                <p>Sistema Integral de Moda</p>
+                <p>📍 Centro Comercial Metro</p>
+                <p>📞 +503 75757575</p>
+                <p>✉️ info@zyra.com</p>
+            </div>
+        </div>
+        
+        <!-- Contenido Principal -->
+        <div class="main-content">
+            <!-- Header Principal -->
+            <div class="main-header">
+                <h2 class="header-title" id="mainTitle">
+                    <i>💬</i> Asistente Virtual
+                </h2>
+                <div class="header-actions">
+                    <div class="user-info" id="userInfo" style="display: none;">
+                        <div class="user-avatar" id="userAvatar">U</div>
+                        <span id="userName">Usuario</span>
+                    </div>
+                    <button class="header-btn secondary" id="helpBtn">
+                        <i>❓</i> Ayuda
+                    </button>
+                    <button class="header-btn" id="logoutBtn" style="display: none;">
+                        <i>🚪</i> Cerrar Sesión
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Contenedor de Pestañas -->
+            <div class="tab-container">
+                <!-- Pestaña de Login -->
+                <div class="tab-content active" id="login-tab">
+                    <div class="login-container">
+                        <div class="login-form">
+                            <h2 class="login-title">Iniciar Sesión</h2>
+                            <div class="form-group">
+                                <label class="form-label">Usuario</label>
+                                <input type="text" class="form-input" id="username" placeholder="Ingresa tu usuario">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Contraseña</label>
+                                <input type="password" class="form-input" id="password" placeholder="Ingresa tu contraseña">
+                            </div>
+                            <button class="login-btn" id="loginButton">Acceder al Sistema</button>
+                            
+                            <div class="login-footer">
+                                <p><strong>Acceso restringido</strong></p>
+                                <p>Este sistema es de uso exclusivo para personal autorizado y clientes registrados.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pestaña del Asistente -->
+                <div class="tab-content" id="assistant-tab">
+                    <div class="assistant-container">
+                        <div class="assistant-header">
+                            <div class="assistant-title">ZYRA - Tu Asistente de Moda</div>
+                            <div class="assistant-subtitle">Estoy aquí para ayudarte a encontrar tu estilo perfecto</div>
+                        </div>
+                        
+                        <div class="chat-area" id="chatArea">
+                            <div class="message bot-message">
+                                ¡Hola! Soy ZYRA, tu asistente personal de moda. ¿En qué puedo ayudarte hoy? Puedo mostrarte nuestros productos, recomendarte outfits o ayudarte a encontrar prendas que se adapten a tu estilo.
+                                <div class="message-time" id="currentTime">08:20</div>
+                            </div>
+                        </div>
+                        
+                        <div class="chat-input-area">
+                            <input type="text" class="message-input" id="messageInput" placeholder="Escribe tu mensaje aquí...">
+                            <button class="send-button" id="sendButton">
+                                <i>➤</i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pestaña de Productos -->
+                <div class="tab-content" id="products-tab">
+                    <div class="assistant-container">
+                        <div class="assistant-header">
+                            <div class="assistant-title">Nuestro Catálogo</div>
+                            <div class="assistant-subtitle">Descubre nuestra colección de moda</div>
+                        </div>
+                        
+                        <div class="chat-area">
+                            <div style="padding: 30px;">
+                                <div class="products-grid" id="catalogProductsGrid">
+                                    <!-- Todos los productos se cargarán aquí -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pestaña de Encuesta -->
+                <div class="tab-content" id="survey-tab">
+                    <div class="assistant-container">
+                        <div class="assistant-header">
+                            <div class="assistant-title">Encuesta de Satisfacción</div>
+                            <div class="assistant-subtitle">Tu opinión nos ayuda a mejorar</div>
+                        </div>
+                        
+                        <div class="chat-area">
+                            <div class="survey-container">
+                                <div class="survey-title">¿Cómo calificarías tu experiencia con ZYRA?</div>
+                                <div class="survey-question">Tu feedback es muy importante para nosotros</div>
+                                <div class="rating-container">
+                                    <div class="rating-star" data-rating="1">★</div>
+                                    <div class="rating-star" data-rating="2">★</div>
+                                    <div class="rating-star" data-rating="3">★</div>
+                                    <div class="rating-star" data-rating="4">★</div>
+                                    <div class="rating-star" data-rating="5">★</div>
+                                </div>
+                                <button class="survey-btn" id="submitClientSurvey">Enviar Calificación</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pestaña del Dashboard (Empleados) -->
+                <div class="tab-content" id="dashboard-tab">
+                    <div class="dashboard-content">
+                        <div class="dashboard-grid">
+                            <div class="stat-card">
+                                <div class="stat-header">
+                                    <div class="stat-title">Ventas del Mes</div>
+                                    <button class="action-btn edit-btn" onclick="editStat('sales')">
+                                        <i>✏️</i>
+                                    </button>
+                                </div>
+                                <div class="stat-value" id="sales-value">$24,580</div>
+                                <div class="stat-trend trend-up">
+                                    <i>📈</i> +12% vs mes anterior
+                                </div>
+                                <div class="stat-icon">💰</div>
+                            </div>
+                            
+                            <div class="stat-card">
+                                <div class="stat-header">
+                                    <div class="stat-title">Productos Vendidos</div>
+                                    <button class="action-btn edit-btn" onclick="editStat('products')">
+                                        <i>✏️</i>
+                                    </button>
+                                </div>
+                                <div class="stat-value" id="products-value">1,247</div>
+                                <div class="stat-trend trend-up">
+                                    <i>📈</i> +8% vs mes anterior
+                                </div>
+                                <div class="stat-icon">🛒</div>
+                            </div>
+                            
+                            <div class="stat-card">
+                                <div class="stat-header">
+                                    <div class="stat-title">Clientes Nuevos</div>
+                                    <button class="action-btn edit-btn" onclick="editStat('clients')">
+                                        <i>✏️</i>
+                                    </button>
+                                </div>
+                                <div class="stat-value" id="clients-value">342</div>
+                                <div class="stat-trend trend-up">
+                                    <i>📈</i> +15% vs mes anterior
+                                </div>
+                                <div class="stat-icon">👥</div>
+                            </div>
+                            
+                            <div class="stat-card">
+                                <div class="stat-header">
+                                    <div class="stat-title">Encuesta Satisfacción</div>
+                                    <button class="action-btn edit-btn" onclick="editStat('satisfaction')">
+                                        <i>✏️</i>
+                                    </button>
+                                </div>
+                                <div class="stat-value" id="satisfaction-value">94%</div>
+                                <div class="stat-trend trend-up">
+                                    <i>📈</i> +2% vs mes anterior
+                                </div>
+                                <div class="stat-icon">⭐</div>
+                            </div>
+                        </div>
+                        
+                        <div class="inventory-container" style="margin-top: 30px;">
+                            <div class="inventory-header">
+                                <h3 class="inventory-title">
+                                    <i>📦</i> Productos con Stock Bajo
+                                </h3>
+                            </div>
+                            <table class="inventory-table">
+                                <thead>
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th>Categoría</th>
+                                        <th>Stock</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="lowStockTable">
+                                    <!-- Los productos con stock bajo se cargarán aquí -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pestaña de Inventario -->
+                <div class="tab-content" id="inventory-tab">
+                    <div class="inventory-content">
+                        <div class="inventory-container">
+                            <div class="inventory-header">
+                                <h3 class="inventory-title">
+                                    <i>📦</i> Gestión de Inventario
+                                </h3>
+                                <button class="header-btn" id="addProductBtn">
+                                    <i>➕</i> Agregar Producto
+                                </button>
+                            </div>
+                            <table class="inventory-table">
+                                <thead>
+                                    <tr>
+                                        <th>Producto</th>
+                                        <th>Categoría</th>
+                                        <th>Precio</th>
+                                        <th>Stock</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inventoryTable">
+                                    <!-- El inventario se cargará aquí -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Pestaña de Reportes -->
+                <div class="tab-content" id="reports-tab">
+                    <div class="reports-content">
+                        <div class="reports-container">
+                            <div class="report-card">
+                                <h3 class="report-title">
+                                    <i>📊</i> Ventas por Categoría
+                                </h3>
+                                <div class="report-content">
+                                    <div style="text-align: center;">
+                                        <div style="font-size: 48px; margin-bottom: 15px;">📈</div>
+                                        <h4>Análisis de Ventas</h4>
+                                        <p>Vestidos: 45%</p>
+                                        <p>Pantalones: 25%</p>
+                                        <p>Camisas: 20%</p>
+                                        <p>Accesorios: 10%</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="report-card">
+                                <h3 class="report-title">
+                                    <i>📈</i> Tendencias de Productos
+                                </h3>
+                                <div class="report-content">
+                                    <div style="text-align: center;">
+                                        <div style="font-size: 48px; margin-bottom: 15px;">🔥</div>
+                                        <h4>Productos Más Populares</h4>
+                                        <p>1. Vestido Floral Verano</p>
+                                        <p>2. Jeans Slim Fit</p>
+                                        <p>3. Camisa Elegante Blanca</p>
+                                        <p>4. Zapatos Deportivos</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="report-card">
+                                <h3 class="report-title">
+                                    <i>👥</i> Comportamiento de Clientes
+                                </h3>
+                                <div class="report-content">
+                                    <div style="text-align: center;">
+                                        <div style="font-size: 48px; margin-bottom: 15px;">👤</div>
+                                        <h4>Perfil del Cliente</h4>
+                                        <p>Clientes recurrentes: 68%</p>
+                                        <p>Nuevos clientes: 32%</p>
+                                        <p>Edad promedio: 28-35</p>
+                                        <p>Preferencia: Casual/Elegante</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="report-card">
+                                <h3 class="report-title">
+                                    <i>📋</i> Inventario por Sucursal
+                                </h3>
+                                <div class="report-content">
+                                    <div style="text-align: center;">
+                                        <div style="font-size: 48px; margin-bottom: 15px;">🏪</div>
+                                        <h4>Distribución</h4>
+                                        <p>Sucursal Centro: 45%</p>
+                                        <p>Sucursal Norte: 25%</p>
+                                        <p>Sucursal Sur: 20%</p>
+                                        <p>Sucursal Este: 10%</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function processUserMessage(message) {
+  const chatArea = document.getElementById("chatArea");
+
+  // Mensaje del usuario
+  const userDiv = document.createElement("div");
+  userDiv.className = "message user-message";
+  userDiv.textContent = message;
+  chatArea.appendChild(userDiv);
+
+  // Llamar al backend (IA)
+  const res = await fetch("http://localhost:3000/api/zyra", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message })
+  });
+
+  const data = await res.json();
+  const botDiv = document.createElement("div");
+  botDiv.className = "message bot-message";
+  botDiv.textContent = data.reply;
+  chatArea.appendChild(botDiv);
+}
+
+        // Datos de productos
+        
+let products = [
+    // 👗 VESTIDOS
+    { name: "Vestido Rojo", category: "Vestidos", price: 39.99, stock: 10, description: "Vestido rojo elegante con corte clásico", colors: ["Rojo"], image: "/img/vestidos/vestidorojo.jpg" },
+    { name: "Vestido Negro", category: "Vestidos", price: 43.99, stock: 12, description: "Vestido negro formal, ideal para eventos", colors: ["Negro"], image: "/img/vestidos/vestidonegro.jpg" },
+    { name: "Vestido Azul", category: "Vestidos", price: 34.99, stock: 15, description: "Vestido azul casual", colors: ["Azul"], image: "/img/vestidos/vestidoazul.jpg" },
+    { name: "Vestido Blanco", category: "Vestidos", price: 33.99, stock: 9, description: "Vestido blanco fresco para verano", colors: ["Blanco"], image: "/img/vestidos/vestidoblanco.jpg" },
+    { name: "Vestido Rosa", category: "Vestidos", price: 37.99, stock: 7, description: "Vestido rosa pastel moderno", colors: ["Rosa"], image: "/img/vestidos/vestidorosa.jpg" },
+    { name: "Vestido Verde", category: "Vestidos", price: 35.99, stock: 10, description: "Vestido verde esmeralda", colors: ["Verde"], image: "/img/vestidos/vestidoverde.jpg" },
+    { name: "Vestido Amarillo", category: "Vestidos", price: 33.99, stock: 8, description: "Vestido amarillo brillante", colors: ["Amarillo"], image: "/img/vestidos/vestidoamarillo.jpg" },
+    { name: "Vestido Lila", category: "Vestidos", price: 38.99, stock: 11, description: "Vestido lila floral", colors: ["Lila"], image: "/img/vestidos/vestidolila.jpg" },
+
+    // 👕 CAMISAS
+    { name: "Camisa Blanca", category: "Camisas", price: 24.99, stock: 15, description: "Camisa blanca clásica", colors: ["Blanco"], image: "/img/camisas/blanca.jpg" },
+    { name: "Camisa Negra", category: "Camisas", price: 28.99, stock: 10, description: "Camisa negra casual", colors: ["Negro"], image: "/img/camisas/negra.jpg" },
+    { name: "Camisa Azul", category: "Camisas", price: 24.99, stock: 10, description: "Camisa azul formal", colors: ["Azul"], image: "/img/camisas/azul.jpg" },
+    { name: "Camisa Roja", category: "Camisas", price: 26.99, stock: 8, description: "Camisa roja de vestir", colors: ["Rojo"], image: "/img/camisas/roja.jpg" },
+    { name: "Camisa Verde", category: "Camisas", price: 24.99, stock: 9, description: "Camisa verde básica", colors: ["Verde"], image: "/img/camisas/verde.jpg" },
+    { name: "Camisa Rosa", category: "Camisas", price: 25.99, stock: 10, description: "Camisa rosa pastel", colors: ["Rosa"], image: "/img/camisas/rosa.jpg" },
+    { name: "Camisa Gris", category: "Camisas", price: 29.99, stock: 6, description: "Camisa gris moderna", colors: ["Gris"], image: "/img/camisas/gris.jpg" },
+    { name: "Camisa Estampada", category: "Camisas", price: 29.99, stock: 10, description: "Camisa estampada floral", colors: ["Varios"], image: "/img/camisas/estampada.jpg" },
+
+    // 👖 PANTALONES
+    { name: "Pantalón Negro", category: "Pantalones", price: 29.99, stock: 12, description: "Pantalón negro clásico", colors: ["Negro"], image: "/img/pantalones/negro.jpg" },
+    { name: "Pantalón Gris", category: "Pantalones", price: 27.99, stock: 10, description: "Pantalón gris casual", colors: ["Gris"], image: "/img/pantalones/gris.jpg" },
+    { name: "Pantalón Azul", category: "Pantalones", price: 34.99, stock: 8, description: "Pantalón azul marino", colors: ["Azul"], image: "/img/pantalones/azul.jpg" },
+    { name: "Pantalón Beige", category: "Pantalones", price: 32.99, stock: 9, description: "Pantalón beige de lino", colors: ["Beige"], image: "/img/pantalones/beige.jpg" },
+    { name: "Pantalón Celeste", category: "Pantalones", price: 33.99, stock: 8, description: "Pantalón celeste", colors: ["Celeste"], image: "/img/pantalones/celeste.jpg" },
+    { name: "Pantalón Verde", category: "Pantalones", price: 31.99, stock: 10, description: "Pantalón verde oliva", colors: ["Verde"], image: "/img/pantalones/verde.jpg" },
+    { name: "Pantalón Azul Marino", category: "Pantalones", price: 37.99, stock: 5, description: "Pantalón azul marino formal", colors: ["Azul Marino"], image: "/img/pantalones/azulmarino.jpg" },
+    { name: "Pantalón Blanco", category: "Pantalones", price: 24.99, stock: 7, description: "Pantalón blanco de verano", colors: ["Blanco"], image: "/img/pantalones/blanco.jpg" },
+
+    // 👟 PANS
+    { name: "Pans Rojo", category: "Pans", price: 19.99, stock: 15, description: "Pantalón deportivo rojo", colors: ["Rojo"], image: "/img/pans/rojo.jpg" },
+    { name: "Pans Negro", category: "Pans", price: 21.99, stock: 12, description: "Pantalón deportivo negro", colors: ["Negro"], image: "/img/pans/negro.jpg" },
+    { name: "Pans Azul", category: "Pans", price: 19.99, stock: 14, description: "Pantalón deportivo azul", colors: ["Azul"], image: "/img/pans/azul.jpg" },
+    { name: "Pans Blanco", category: "Pans", price: 20.99, stock: 10, description: "Pantalón deportivo blanco", colors: ["Blanco"], image: "/img/pans/blanco.jpg" },
+    { name: "Pans Rosa", category: "Pans", price: 21.99, stock: 9, description: "Pantalón deportivo rosa", colors: ["Rosa"], image: "/img/pans/rosa.jpg" },
+    { name: "Pans Verde", category: "Pans", price: 22.99, stock: 10, description: "Pantalón deportivo verde", colors: ["Verde"], image: "/img/pans/verde.jpg" },
+    { name: "Pans Gris", category: "Pans", price: 18.99, stock: 13, description: "Pantalón deportivo gris", colors: ["Gris"], image: "/img/pans/gris.jpg" },
+    { name: "Pans Naranja", category: "Pans", price: 23.99, stock: 11, description: "Pantalón deportivo naranja", colors: ["Naranja"], image: "/img/pans/naranja.jpg" },
+
+    // 👗 FALDAS
+    { name: "Falda Roja", category: "Faldas", price: 29.99, stock: 10, description: "Falda roja corta", colors: ["Rojo"], image: "/img/faldas/roja.jpg" },
+    { name: "Falda Negra", category: "Faldas", price: 31.99, stock: 8, description: "Falda negra formal", colors: ["Negro"], image: "/img/faldas/negra.jpg" },
+    { name: "Falda Azul", category: "Faldas", price: 26.99, stock: 9, description: "Falda azul juvenil", colors: ["Azul"], image: "/img/faldas/azul.jpg" },
+    { name: "Falda Naranja", category: "Faldas", price: 27.99, stock: 10, description: "Falda naranja casual", colors: ["Naranja"], image: "/img/faldas/naranja.jpg" },
+    { name: "Falda Rosa", category: "Faldas", price: 29.99, stock: 7, description: "Falda rosa con vuelo", colors: ["Rosa"], image: "/img/faldas/rosa.jpg" },
+    { name: "Falda Verde", category: "Faldas", price: 31.99, stock: 9, description: "Falda verde esmeralda", colors: ["Verde"], image: "/img/faldas/verde.jpg" },
+    { name: "Falda Amarilla", category: "Faldas", price: 24.99, stock: 10, description: "Falda amarilla brillante", colors: ["Amarillo"], image: "/img/faldas/amarilla.jpg" },
+    { name: "Falda Lila", category: "Faldas", price: 32.99, stock: 11, description: "Falda lila suave", colors: ["Lila"], image: "/img/faldas/lila.jpg" }
+];
+
+
+        // Datos del dashboard
+        const statsData = {
+            sales: { value: "$24,580", trend: "up", change: "+12%" },
+            products: { value: "1,247", trend: "up", change: "+8%" },
+            clients: { value: "342", trend: "up", change: "+15%" },
+            satisfaction: { value: "94%", trend: "up", change: "+2%" }
+        };
+
+        // Variables globales
+        let currentUser = null;
+        let currentRating = 0;
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeLogin();
+            initializeTabs();
+            initializeChat();
+            initializeSurvey();
+            loadProductsCatalog();
+            updateCurrentTime();
+        });
+        
+        // Sistema de Login
+        function initializeLogin() {
+            const loginButton = document.getElementById('loginButton');
+            
+            loginButton.addEventListener('click', function() {
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                
+                if (username && password) {
+                    // Simular autenticación
+                    if ((username === 'usuario' && password === '1234') || 
+                        (username === 'ohass' && password === '1234')) {
+                        
+                        currentUser = {
+                            username: username,
+                            role: username === 'ohass' ? 'employee' : 'client'
+                        };
+                        
+                        // Mostrar interfaz según el rol
+                        showUserInterface();
+                    } else {
+                        alert('Credenciales incorrectas. Por favor verifica tu usuario y contraseña.');
+                    }
+                } else {
+                    alert('Por favor ingresa usuario y contraseña');
+                }
+            });
+        }
+        
+        function showUserInterface() {
+            // Ocultar login
+            document.getElementById('login-tab').classList.remove('active');
+            
+            // Mostrar información de usuario
+            document.getElementById('userInfo').style.display = 'flex';
+            document.getElementById('userName').textContent = currentUser.username;
+            document.getElementById('userAvatar').textContent = currentUser.username.charAt(0).toUpperCase();
+            
+            // Mostrar botón de logout
+            document.getElementById('logoutBtn').style.display = 'flex';
+            
+            // Mostrar opciones según el rol
+            if (currentUser.role === 'employee') {
+                document.getElementById('employee-options').classList.add('active');
+                document.getElementById('client-options').classList.remove('active');
+                showTab('dashboard');
+                loadInventory();
+                loadLowStockProducts();
+            } else {
+                document.getElementById('client-options').classList.add('active');
+                document.getElementById('employee-options').classList.remove('active');
+                showTab('assistant');
+            }
+        }
+        
+        // Sistema de pestañas
+        function initializeTabs() {
+            const navButtons = document.querySelectorAll('.nav-button');
+            const mainTitle = document.getElementById('mainTitle');
+            
+            const tabTitles = {
+                'assistant': '💬 Asistente Virtual',
+                'products': '🛍️ Catálogo',
+                'survey': '⭐ Encuesta',
+                'dashboard': '📊 Dashboard',
+                'inventory': '📦 Inventario',
+                'reports': '📈 Reportes'
+            };
+            
+            navButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    if (!currentUser) return;
+                    
+                    const tabId = this.getAttribute('data-tab');
+                    showTab(tabId);
+                    
+                    // Actualizar botones activos
+                    navButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // Botón de ayuda
+            document.getElementById('helpBtn').addEventListener('click', function() {
+                if (!currentUser) {
+                    alert('Por favor inicia sesión para acceder al sistema de ayuda');
+                    return;
+                }
+                
+                if (currentUser.role === 'employee') {
+                    alert('AYUDA PARA EMPLEADOS:\n\n• Dashboard: Visualiza métricas clave del negocio\n• Inventario: Gestiona productos y stock\n• Reportes: Accede a análisis detallados\n\nPara editar métricas, haz clic en el ícono de edición en cada tarjeta.');
+                } else {
+                    alert('AYUDA PARA CLIENTES:\n\n• Asistente Virtual: Chatea con ZYRA para obtener recomendaciones\n• Catálogo: Explora todos nuestros productos\n• Encuesta: Califica tu experiencia con ZYRA\n\n¡ZYRA está aquí para ayudarte a encontrar tu estilo perfecto!');
+                }
+            });
+            
+            // Botón de cerrar sesión
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                // Cerrar sesión inmediatamente
+                currentUser = null;
+                
+                // Ocultar elementos de usuario
+                document.getElementById('userInfo').style.display = 'none';
+                document.getElementById('logoutBtn').style.display = 'none';
+                
+                // Ocultar opciones de usuario
+                document.getElementById('employee-options').classList.remove('active');
+                document.getElementById('client-options').classList.remove('active');
+                
+                // Limpiar chat
+                document.getElementById('chatArea').innerHTML = `
+                    <div class="message bot-message">
+                        ¡Hola! Soy ZYRA, tu asistente personal de moda. ¿En qué puedo ayudarte hoy? Puedo mostrarte nuestros productos, recomendarte outfits o ayudarte a encontrar prendas que se adapten a tu estilo.
+                        <div class="message-time" id="currentTime">${getCurrentTime()}</div>
+                    </div>
+                `;
+                
+                // Mostrar login
+                showTab('login');
+                
+                // Limpiar campos de login
+                document.getElementById('username').value = '';
+                document.getElementById('password').value = '';
+            });
+        }
+        
+        function showTab(tabId) {
+            const tabContents = document.querySelectorAll('.tab-content');
+            const mainTitle = document.getElementById('mainTitle');
+            const tabTitles = {
+                'assistant': '💬 Asistente Virtual',
+                'products': '🛍️ Catálogo',
+                'survey': '⭐ Encuesta',
+                'dashboard': '📊 Dashboard',
+                'inventory': '📦 Inventario',
+                'reports': '📈 Reportes',
+                'login': '👤 Iniciar Sesión'
+            };
+            
+            tabContents.forEach(content => content.classList.remove('active'));
+            document.getElementById(`${tabId}-tab`).classList.add('active');
+            
+            if (tabTitles[tabId]) {
+                mainTitle.innerHTML = `<i>${tabTitles[tabId].split(' ')[0]}</i> ${tabTitles[tabId].split(' ').slice(1).join(' ')}`;
+            }
+        }
+        
+        // Sistema de chat
+        function initializeChat() {
+            const chatArea = document.getElementById('chatArea');
+            const messageInput = document.getElementById('messageInput');
+            const sendButton = document.getElementById('sendButton');
+            
+            const quickOptions = [
+                "Ver productos disponibles",
+                "Recomiéndame un outfit",
+                "Tendencias de temporada",
+                "Cómo combinar accesorios",
+                "Qué colores van con esto"
+            ];
+            
+            // Mostrar opciones rápidas después de un momento
+            setTimeout(() => {
+                if (document.getElementById('assistant-tab').classList.contains('active')) {
+                    showQuickOptions(quickOptions);
+                }
+            }, 1500);
+            
+            // Enviar mensaje
+            sendButton.addEventListener('click', sendMessage);
+            messageInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+            
+            function sendMessage() {
+                const message = messageInput.value.trim();
+                if (message) {
+                    addUserMessage(message);
+                    messageInput.value = '';
+                    
+                    setTimeout(() => {
+                        processUserMessage(message);
+                    }, 1000);
+                }
+            }
+            
+            function addUserMessage(text) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message user-message';
+                messageDiv.textContent = text;
+                
+                const timeDiv = document.createElement('div');
+                timeDiv.className = 'message-time';
+                timeDiv.textContent = getCurrentTime();
+                
+                messageDiv.appendChild(timeDiv);
+                chatArea.appendChild(messageDiv);
+                chatArea.scrollTop = chatArea.scrollHeight;
+                
+                // Limpiar opciones rápidas
+                const options = document.querySelector('.quick-options');
+                if (options) {
+                    options.remove();
+                }
+            }
+            
+            function addBotMessage(text) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message bot-message';
+                messageDiv.textContent = text;
+                
+                const timeDiv = document.createElement('div');
+                timeDiv.className = 'message-time';
+                timeDiv.textContent = getCurrentTime();
+                
+                messageDiv.appendChild(timeDiv);
+                chatArea.appendChild(messageDiv);
+                chatArea.scrollTop = chatArea.scrollHeight;
+            }
+            
+            function showQuickOptions(options) {
+                const optionsContainer = document.createElement('div');
+                optionsContainer.className = 'quick-options';
+                
+                options.forEach(optionText => {
+                    const option = document.createElement('div');
+                    option.className = 'quick-option';
+                    option.textContent = optionText;
+                    option.addEventListener('click', () => {
+                        addUserMessage(optionText);
+                        setTimeout(() => {
+                            processUserMessage(optionText);
+                        }, 1000);
+                    });
+                    optionsContainer.appendChild(option);
+                });
+                
+                chatArea.appendChild(optionsContainer);
+                chatArea.scrollTop = chatArea.scrollHeight;
+            }
+            
+            function processUserMessage(message) {
+                if (message.includes("productos") || message.includes("disponibles")) {
+                    showProductsInChat();
+                } else if (message.includes("outfit")) {
+                    showOutfitRecommendation();
+                } else if (message.includes("tendencias")) {
+                    addBotMessage("Esta temporada destacan los tonos tierra, los cortes oversize y los accesorios minimalistas. El verde oliva y el naranja quemado son especialmente populares para crear looks modernos y elegantes.");
+                } else if (message.includes("accesorios")) {
+                    addBotMessage("Para combinar accesorios, te recomiendo elegir una pieza destacada y mantener el resto más discreto. Combina metales del mismo tono y considera el estilo de tu outfit: minimalista para looks formales y más atrevido para ocasiones casuales.");
+                } else if (message.includes("colores")) {
+                    addBotMessage("Para combinar colores, te recomiendo:\n• Colores neutros (negro, blanco, gris, beige) como base\n• Un color de acento que complemente tu tono de piel\n• Para outfits atrevidos: combina colores complementarios\n• Para looks elegantes: usa diferentes tonos del mismo color");
+                } else {
+                    addBotMessage("¡Excelente pregunta! Como asistente de moda, puedo mostrarte productos, recomendarte outfits o ayudarte a encontrar prendas que se adapten a tu estilo. ¿Qué te gustaría hacer?");
+                    setTimeout(() => {
+                        showQuickOptions(quickOptions);
+                    }, 500);
+                }
+            }
+            
+            function showProductsInChat() {
+                addBotMessage("Aquí tienes algunos de nuestros productos más populares:");
+                
+                const productsGrid = document.createElement('div');
+                productsGrid.className = 'products-grid';
+                
+                // Mostrar solo 6 productos
+                const productsToShow = products.slice(0, 6);
+                
+                productsToShow.forEach(product => {
+                    const productCard = document.createElement('div');
+                    productCard.className = 'product-card';
+                    productCard.innerHTML = `
+                        <div class="product-image">${product.image}</div>
+                        <div class="product-info">
+                            <div class="product-name">${product.name}</div>
+                            <div class="product-price">$${product.price}</div>
+                            <div class="product-stock">Stock: ${product.stock}</div>
+                        </div>
+                    `;
+                    productCard.addEventListener('click', () => {
+                        addUserMessage(`Me interesa ${product.name}`);
+                        setTimeout(() => {
+                            showProductDetails(product);
+                        }, 1000);
+                    });
+                    productsGrid.appendChild(productCard);
+                });
+                
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message bot-message';
+                messageDiv.appendChild(productsGrid);
+                
+                const timeDiv = document.createElement('div');
+                timeDiv.className = 'message-time';
+                timeDiv.textContent = getCurrentTime();
+                
+                messageDiv.appendChild(timeDiv);
+                chatArea.appendChild(messageDiv);
+                chatArea.scrollTop = chatArea.scrollHeight;
+                
+                setTimeout(() => {
+                    showQuickOptions(["Ver más productos", "Recomiéndame un outfit"]);
+                }, 500);
+            }
+            
+            function showProductDetails(product) {
+                addBotMessage(`Excelente elección! El ${product.name} es ${product.description}. Disponible en colores: ${product.colors.join(', ')}. Precio: $${product.price}. ¿Te gustaría ver más productos similares?`);
+                
+                setTimeout(() => {
+                    showQuickOptions(["Ver más productos", "Recomendación de outfit"]);
+                }, 500);
+            }
+            
+            function showOutfitRecommendation() {
+                const outfits = [
+                    {
+                        name: "Outfit Casual Elegante",
+                        description: "Perfecto para reuniones informales o días de oficina casual",
+                        items: [
+                            { name: "Jeans Slim Fit", image: "👖 Jeans Slim" },
+                            { name: "Camisa Elegante Blanca", image: "👔 Camisa Blanca" },
+                            { name: "Zapatos Deportivos", image: "👟 Zapatos Deportivos" }
+                        ],
+                        occasion: "Casual"
+                    },
+                    {
+                        name: "Outfit de Noche",
+                        description: "Ideal para cenas o eventos nocturnos",
+                        items: [
+                            { name: "Vestido Floral Verano", image: "🌸 Vestido Floral" },
+                            { name: "Bolso de Cuero Negro", image: "👜 Bolso de Cuero" },
+                            { name: "Gafas de Sol Clásicas", image: "🕶️ Gafas de Sol" }
+                        ],
+                        occasion: "Formal"
+                    },
+                    {
+                        name: "Outfit de Oficina",
+                        description: "Profesional y elegante para el entorno laboral",
+                        items: [
+                            { name: "Blazer Negro Elegante", image: "👔 Blazer Negro" },
+                            { name: "Falda Plisada", image: "👗 Falda Plisada" },
+                            { name: "Top Básico Blanco", image: "👚 Top Blanco" }
+                        ],
+                        occasion: "Oficina"
+                    }
+                ];
+                
+                const randomOutfit = outfits[Math.floor(Math.random() * outfits.length)];
+                
+                addBotMessage(`Te recomiendo este ${randomOutfit.name}: ${randomOutfit.description}.`);
+                
+                // Mostrar imágenes de las prendas del outfit
+                const outfitGrid = document.createElement('div');
+                outfitGrid.className = 'products-grid';
+                
+                randomOutfit.items.forEach(item => {
+                    const product = products.find(p => p.name === item.name);
+                    if (product) {
+                        const productCard = document.createElement('div');
+                        productCard.className = 'product-card';
+                        productCard.innerHTML = `
+                            <div class="product-image">${product.image}</div>
+                            <div class="product-info">
+                                <div class="product-name">${product.name}</div>
+                                <div class="product-price">$${product.price}</div>
+                            </div>
+                        `;
+                        productCard.addEventListener('click', () => {
+                            addUserMessage(`Me interesa ${product.name}`);
+                            setTimeout(() => {
+                                showProductDetails(product);
+                            }, 1000);
+                        });
+                        outfitGrid.appendChild(productCard);
+                    }
+                });
+                
+                const outfitMessage = document.createElement('div');
+                outfitMessage.className = 'message bot-message';
+                outfitMessage.appendChild(outfitGrid);
+                
+                const timeDiv = document.createElement('div');
+                timeDiv.className = 'message-time';
+                timeDiv.textContent = getCurrentTime();
+                
+                outfitMessage.appendChild(timeDiv);
+                chatArea.appendChild(outfitMessage);
+                chatArea.scrollTop = chatArea.scrollHeight;
+                
+                setTimeout(() => {
+                    showQuickOptions(["Ver productos del outfit", "Otra recomendación"]);
+                }, 500);
+            }
+            
+            function getCurrentTime() {
+                const now = new Date();
+                return `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+            }
+        }
+        
+        // Encuesta de satisfacción
+        function initializeSurvey() {
+            const stars = document.querySelectorAll('.rating-star');
+            const submitBtn = document.getElementById('submitClientSurvey');
+            
+            stars.forEach(star => {
+                star.addEventListener('click', function() {
+                    const rating = parseInt(this.getAttribute('data-rating'));
+                    currentRating = rating;
+                    
+                    // Actualizar estrellas
+                    stars.forEach(s => {
+                        const starRating = parseInt(s.getAttribute('data-rating'));
+                        if (starRating <= rating) {
+                            s.classList.add('active');
+                        } else {
+                            s.classList.remove('active');
+                        }
+                    });
+                });
+            });
+            
+            submitBtn.addEventListener('click', function() {
+                if (currentRating === 0) {
+                    alert('Por favor selecciona una calificación');
+                    return;
+                }
+                
+                alert(`¡Gracias por tu calificación de ${currentRating} estrellas! Tu feedback nos ayuda a mejorar.`);
+                
+                // Reiniciar encuesta
+                stars.forEach(star => star.classList.remove('active'));
+                currentRating = 0;
+            });
+        }
+        
+        // Catálogo de productos
+        function loadProductsCatalog() {
+            const productsGrid = document.getElementById('catalogProductsGrid');
+            
+            products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                productCard.innerHTML = `
+                    <div class="product-image">${product.image}</div>
+                    <div class="product-info">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-price">$${product.price}</div>
+                        <div class="product-stock">Stock: ${product.stock}</div>
+                    </div>
+                `;
+                productCard.addEventListener('click', () => {
+                    alert(`Producto: ${product.name}\nPrecio: $${product.price}\nDescripción: ${product.description}\nColores: ${product.colors.join(', ')}`);
+                });
+                productsGrid.appendChild(productCard);
+            });
+        }
+        
+        // Gestión de inventario
+        function loadInventory() {
+            const inventoryTable = document.getElementById('inventoryTable');
+            
+            // Limpiar tabla
+            inventoryTable.innerHTML = '';
+            
+            products.forEach(product => {
+                const row = document.createElement('tr');
+                
+                let statusClass = '';
+                let statusText = '';
+                
+                if (product.stock === 0) {
+                    statusClass = 'stock-critical';
+                    statusText = 'Agotado';
+                } else if (product.stock < 5) {
+                    statusClass = 'stock-critical';
+                    statusText = 'Crítico';
+                } else if (product.stock < 10) {
+                    statusClass = 'stock-low';
+                    statusText = 'Bajo';
+                } else {
+                    statusClass = 'stock-ok';
+                    statusText = 'Disponible';
+                }
+                
+                row.innerHTML = `
+                    <td>${product.name}</td>
+                    <td>${product.category}</td>
+                    <td>$${product.price}</td>
+                    <td>${product.stock}</td>
+                    <td><span class="${statusClass}">${statusText}</span></td>
+                    <td>
+                        <button class="action-btn edit-btn" onclick="editProduct(${product.id})">
+                            <i>✏️</i>
+                        </button>
+                        <button class="action-btn restock-btn" onclick="restockProduct(${product.id})">
+                            <i>🔄</i>
+                        </button>
+                        <button class="action-btn delete-btn" onclick="deleteProduct(${product.id})">
+                            <i>🗑️</i>
+                        </button>
+                    </td>
+                `;
+                
+                inventoryTable.appendChild(row);
+            });
+        }
+        
+        function loadLowStockProducts() {
+            const lowStockTable = document.getElementById('lowStockTable');
+            
+            // Limpiar tabla
+            lowStockTable.innerHTML = '';
+            
+            const lowStockProducts = products.filter(product => product.stock < 10);
+            
+            if (lowStockProducts.length === 0) {
+                lowStockTable.innerHTML = `
+                    <tr>
+                        <td colspan="5" style="text-align: center; color: var(--text-light); padding: 20px;">
+                            No hay productos con stock bajo
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            lowStockProducts.forEach(product => {
+                const row = document.createElement('tr');
+                
+                let statusClass = product.stock < 5 ? 'stock-critical' : 'stock-low';
+                let statusText = product.stock < 5 ? 'Crítico' : 'Bajo';
+                
+                row.innerHTML = `
+                    <td>${product.name}</td>
+                    <td>${product.category}</td>
+                    <td>${product.stock}</td>
+                    <td><span class="${statusClass}">${statusText}</span></td>
+                    <td>
+                        <button class="action-btn edit-btn" onclick="editProduct(${product.id})">
+                            <i>✏️</i>
+                        </button>
+                        <button class="action-btn restock-btn" onclick="restockProduct(${product.id})">
+                            <i>🔄</i> Reabastecer
+                        </button>
+                    </td>
+                `;
+                
+                lowStockTable.appendChild(row);
+            });
+        }
+        
+        function editProduct(productId) {
+            const product = products.find(p => p.id === productId);
+            const newStock = prompt(`Editar stock de ${product.name}:`, product.stock);
+            
+            if (newStock !== null && !isNaN(newStock) && newStock >= 0) {
+                product.stock = parseInt(newStock);
+                loadInventory();
+                loadLowStockProducts();
+                alert(`Stock de ${product.name} actualizado a ${newStock}`);
+            }
+        }
+        
+        function restockProduct(productId) {
+            const product = products.find(p => p.id === productId);
+            const addStock = prompt(`¿Cuántas unidades agregar a ${product.name}?`, "10");
+            
+            if (addStock !== null && !isNaN(addStock) && addStock > 0) {
+                product.stock += parseInt(addStock);
+                loadInventory();
+                loadLowStockProducts();
+                alert(`Se agregaron ${addStock} unidades a ${product.name}. Nuevo stock: ${product.stock}`);
+            }
+        }
+        
+        function deleteProduct(productId) {
+            const product = products.find(p => p.id === productId);
+            
+            if (confirm(`¿Estás seguro de que quieres eliminar ${product.name}?`)) {
+                products = products.filter(p => p.id !== productId);
+                loadInventory();
+                loadLowStockProducts();
+                alert(`${product.name} eliminado del inventario`);
+            }
+        }
+        
+        // Editar estadísticas del dashboard
+        function editStat(statType) {
+            const statData = statsData[statType];
+            let title = '';
+            let currentValue = statData.value;
+            
+            switch(statType) {
+                case 'sales':
+                    title = 'Ventas del Mes';
+                    break;
+                case 'products':
+                    title = 'Productos Vendidos';
+                    break;
+                case 'clients':
+                    title = 'Clientes Nuevos';
+                    break;
+                case 'satisfaction':
+                    title = 'Satisfacción';
+                    break;
+            }
+            
+            const newValue = prompt(`Editar ${title}:`, currentValue);
+            
+            if (newValue !== null && newValue.trim() !== '') {
+                statsData[statType].value = newValue;
+                document.getElementById(`${statType}-value`).textContent = newValue;
+                alert(`${title} actualizado a ${newValue}`);
+            }
+        }
+        
+        function updateCurrentTime() {
+            const timeElement = document.getElementById('currentTime');     
+            if (timeElement) {
+                timeElement.textContent = getCurrentTime();
+            }
+        }
+        
+        function getCurrentTime() {
+            const now = new Date();
+            return `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+        }
+    </script>
+</body>
+</html>
